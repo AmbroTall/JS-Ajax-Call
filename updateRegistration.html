@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    
+    <title>Update Reservation</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <h2>Update a Reservation <a href="index.html" class="btn btn-sm btn-secondary">Back</a></h2>
+
+        <div class="form-group">
+            <label for="Id">Full name:</label>
+            <input type="text" class="form-control" id="Id" />
+        </div>
+        <div class="form-group">
+            <label for="Name">Full name:</label>
+            <input type="text" class="form-control" id="Name" />
+        </div>
+        <div class="form-group">
+            <label for="birth_place">Birth_place:</label>
+            <input type="text" class="form-control" id="birth_place" />
+        </div>
+        <div class="form-group">
+            <label for="current_place">Current_place:</label>
+            <input type="text" class="form-control" id="current_place" />
+        </div>
+
+
+        <div class="text-center panel-body">
+            <button type="submit" class="btn btn-sm btn-primary" id="UpdateButton" onclick="UpdateReservation()">Update</button>
+        </div>
+
+        <div style="display:none" id="resultDiv">
+            <h2>Reservation</h2>
+            <table class="table table-sm table-striped table-bordered m-2">
+                <thead><tr><th>ID</th><th>Name</th><th>Start Location</th><th>End Location</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        GetReservation();
+
+
+        function UpdateReservation() {
+            var id = document.getElementById("Id").value
+
+            var xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText); 
+                    var tbody = document.getElementById("resultDiv").querySelector("tbody");
+                    tbody.innerHTML += "<tr><td>" + document.getElementById("Id").value + "</td><td>" + document.getElementById("Name").value + "</td>" + "<td>" + document.getElementById("birth_place").value + "</td>"+ "<td>" + document.getElementById("current_place").value + "</td></tr>";
+                    document.getElementById("resultDiv").style.display = "block";
+                    
+                }
+            };
+
+            xhttp.open("PUT", "http://127.0.0.1:8000/update/api/" + id, true);
+
+          
+
+            data = new FormData();
+            data.append("id", document.getElementById("Id").value);
+            data.append("name", document.getElementById("Name").value);
+            data.append("birth_place", document.getElementById("birth_place").value);
+            data.append("current_place", document.getElementById("current_place").value);
+            xhttp.send(data);
+
+        }
+
+
+
+        function GetReservation() {
+            let params = (new URL(document.location)).searchParams;
+            let id = params.get("id");
+
+            var xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    document.getElementById("Id").value = response.id;
+                    document.getElementById("Name").value = response.name;
+                    document.getElementById("birth_place").value = response.birth_place;
+                    document.getElementById("current_place").value = response.current_place;
+                }
+            };
+
+            xhttp.open("GET", "http://127.0.0.1:8000/detail/api/" + id, true);
+            xhttp.send();
+        }
+
+    
+    </script>
+</body>
+</html>
