@@ -82,7 +82,7 @@
                 }
             };
 
-            xhttp.open("POST", "http://127.0.0.1:8000/create/api", true);
+            xhttp.open("POST", "https://crud-app-ajax.herokuapp.com/create/api", true);
             xhttp.setRequestHeader("Content-type", "application/json");
             // xhttp.setRequestHeader("Key", "Secret@123");
             var obj = {name: document.getElementById("Name").value, birth_place: document.getElementById("birth_place").value, current_place: document.getElementById("current_place").value };
